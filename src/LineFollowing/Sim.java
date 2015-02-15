@@ -116,13 +116,14 @@ public class Sim {
 	// ================= Setup =================
 	public Sim() throws Exception
 	{
-		Setup();
-		new Robot(L_Sens_Left, L_Sens_Right, us, pilot);
+		LegoRobot r = Setup();
+		new Robot(r, L_Sens_Left, L_Sens_Right, us, pilot);
 	
 	}
   
-	public void Setup() {
+	public LegoRobot Setup() {
 		robot = new LegoRobot();
+		
 		
 		Motor RightMotor = new Motor(MotorPort.A);
 		Motor LeftMotor = new Motor(MotorPort.B);
@@ -132,8 +133,8 @@ public class Sim {
 		
 		us = new UltrasonicSensor(SensorPort.S3);
 		
-		us.setBeamAreaColor(Color.green);
-		us.setProximityCircleColor(Color.lightGray);
+	//	us.setBeamAreaColor(Color.green);
+//		us.setProximityCircleColor(Color.lightGray);
 		
 		Gear gear = new Gear();
 		pilot = new DifferentialPilot(gear);
@@ -151,6 +152,6 @@ public class Sim {
 	    
 	    robot.addPart(gear); 
 	    
-	   
+	    return robot;
 	}
 }

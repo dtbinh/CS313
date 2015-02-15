@@ -15,9 +15,8 @@ public class Values {
 	public static final int VISITED = 30;
 		
 	//Threshold Values
-	static int thLight = 40;
-	//static int thSonar = 120;
-	static int thSonar = 10;
+	static int thLight = 500;
+	static int thSonar = 120;
 	
 	//Grid Size
 	static int GridX = 4;

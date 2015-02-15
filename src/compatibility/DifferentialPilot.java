@@ -10,6 +10,7 @@ public class DifferentialPilot {
 	}
 
 	public void setSpeed(int speed) {	gear.setSpeed(speed);	}
+	public int getSpeed() 			{	return gear.getSpeed();	}
     public void forward() 			{	gear.forward();			}
     public void backward()			{	gear.backward(); 		}
     public void stop() 				{	gear.stop();			}
@@ -24,6 +25,8 @@ public class DifferentialPilot {
     	} else {
     		gear.right(angle / 90 * 575);
     	}
+    	
+    	//gear.trun();
     }
 }
 
