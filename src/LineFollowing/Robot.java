@@ -14,11 +14,14 @@ import ch.aplu.robotsim.LightSensor;
 import ch.aplu.robotsim.UltrasonicSensor;
 
 
-class Robot {
+public class Robot {
 	
 	//================== Variables ==================
 	public static boolean wait = false;
 
+	static private int draw_x = 0;
+	static private int draw_y = 0;
+	
 	static private LightSensor L_Sens_Left;
 	static private LightSensor L_Sens_Right;
 	
@@ -81,12 +84,7 @@ class Robot {
 	}
 	
 	public static void rotate(int x) {
-		//pilot.rotate(x);
-
-		Actor r = robot.getRobot();
-		r.turn(x);
-		
-		//ultraSonic.
+		pilot.rotate(x);
 	}
 	
 	public static void rotateLeft() {
@@ -153,14 +151,14 @@ class Robot {
 
 	
 	public static void print(String s) {
-		System.out.print(s);
+		LCD.drawString(s, draw_x, draw_y);
+		draw_x += s.length();
 	}
 	
 	public static void println(String s) {
-		if(s == null)
-			System.out.println();
-		else
-			System.out.println(s);
+		if(s != null) LCD.drawString(s, draw_x, draw_y);
+		draw_y++;
+		draw_x = 0;
 	}
 	
 }
@@ -839,8 +837,6 @@ class Junction implements Behavior
 	
 	public void action()			// what to do
 	{	
-		
-		
 		stop = false;
 		
 		if(Robot.wait) {
