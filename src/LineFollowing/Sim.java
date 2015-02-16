@@ -39,14 +39,19 @@ public class Sim {
 	// ================= Environment =================
 	static
 	{
+		
+		//RobotContext.useObstacle("sprites/hazelnut.gif", 200, 375);
+		//RobotContext.setLocation(10, 10);
+		//RobotContext.useObstacle(RobotContext.channel);
+		
 		RobotContext.showNavigationBar();
 		  
-		//RobotContext.useObstacle("sprites/hazelnut.gif", 200, 375);
+		
 	
-		//RobotContext.setLocation(10, 10);
+
 		RobotContext.setStartDirection(0);
-		RobotContext.setStartPosition(90, 390);
-		//RobotContext.useObstacle(RobotContext.channel);
+		RobotContext.setStartPosition(Values.START_X, Values.START_Y);
+		
 		RobotContext.useBackground("sprites/grid2.gif");
 		
 		

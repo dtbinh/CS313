@@ -9,12 +9,15 @@ import lejos.geom.Point;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 import ch.aplu.jgamegrid.Actor;
+import ch.aplu.jgamegrid.Location;
 import ch.aplu.robotsim.LegoRobot;
 import ch.aplu.robotsim.LightSensor;
 import ch.aplu.robotsim.UltrasonicSensor;
 
 
 class Robot {
+	public static boolean wait = false;
+	
 	//================== Variables ==================	
 	static private LightSensor L_Sens_Left;
 	static private LightSensor L_Sens_Right;
@@ -862,10 +865,24 @@ class Junction implements Behavior
 		
 		stop = false;
 		
+		if(Robot.wait) {
+			return;
+		}
 		
-		
-		if(Map.atTarget() == true) {
+		if(Map.atTarget() == true ) {
+			System.out.println("At target");
+			
 			Robot.stop();
+			//Robot.robot.getRobot().setX(Values.START_X);
+			//Robot.robot.getRobot().setY(Values.START_Y);
+			
+			Navigator.pathMemory = (LinkedList<Integer>) AStar.openNodes[Map.robotX][Map.robotY].getPath().clone();
+			
+			Map.robotX = 0;
+			Map.robotY = 0;
+			
+			Robot.wait = true;
+			
 			return;
 		}
 		
@@ -945,6 +962,7 @@ class Move implements Behavior
 	public void action()			// what to do
 	{	
 		stop = false;
+		Robot.wait = false;
 		
 		Robot.forward();
 		

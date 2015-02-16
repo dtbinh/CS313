@@ -9,6 +9,11 @@ public class Values {
 	public static final int SOUTH = 503;
 	
 	
+	public static final int START_X = 70 ;
+	public static final int START_Y = 390;
+	
+	
+	
 	
 	public static final int BLOCKED = 10;
 	public static final int CLEAR = 20;
