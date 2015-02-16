@@ -46,15 +46,10 @@ public class Sim {
 		
 		RobotContext.showNavigationBar();
 		  
-		
-	
-
 		RobotContext.setStartDirection(0);
 		RobotContext.setStartPosition(Values.START_X, Values.START_Y);
 		
 		RobotContext.useBackground("sprites/grid2.gif");
-		
-		
 		
 		  Point[] nut_mesh =
 			    {
@@ -62,6 +57,7 @@ public class Sim {
 			      new Point(-10, -10), new Point(10, -10)
 			    };
 			   
+		  /*
 		  RobotContext.useTarget("sprites/hazelnut.gif", nut_mesh, 200, 350);
 		  
 		  RobotContext.useTarget("sprites/hazelnut.gif", nut_mesh, 300, 350);
@@ -81,7 +77,7 @@ public class Sim {
 		  RobotContext.useTarget("sprites/hazelnut.gif", nut_mesh, 300, 250);
 		  
 		  RobotContext.useTarget("sprites/hazelnut.gif", nut_mesh, 400, 150);
-	
+		*/
 		
 	}
 	

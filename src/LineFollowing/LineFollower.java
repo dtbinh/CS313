@@ -9,16 +9,16 @@ import lejos.geom.Point;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 import ch.aplu.jgamegrid.Actor;
-import ch.aplu.jgamegrid.Location;
 import ch.aplu.robotsim.LegoRobot;
 import ch.aplu.robotsim.LightSensor;
 import ch.aplu.robotsim.UltrasonicSensor;
 
 
 class Robot {
-	public static boolean wait = false;
 	
-	//================== Variables ==================	
+	//================== Variables ==================
+	public static boolean wait = false;
+
 	static private LightSensor L_Sens_Left;
 	static private LightSensor L_Sens_Right;
 	
@@ -156,6 +156,7 @@ class Robot {
 		
 	} 
 
+	
 	public static void drawSonic() {
 		int distance = ultraSonic.getDistance();
 		
@@ -166,11 +167,6 @@ class Robot {
 		
 	}
 	
-	
-	/**
-	 * Draws values of the left and right
-	 * Sensors on the screen. 
-	 */
 	public static void drawSensor() {
 
 		/*
@@ -188,17 +184,9 @@ class Robot {
 
 
 
-
-
 //================= Navigation Layer =================
-/**
- * @author Teo
- * Class Map wills tore information about 
- * the robots environment. It will be updated
- * in real time as the robot explores the maze
- */
 class Map {
-	
+	//-------------- Variables --------------
 	static int virtualWorld[][];
 	
 	static int robotX;
@@ -212,6 +200,7 @@ class Map {
 	
 	static int facing;
 	
+	//-------------- Methods --------------
 	public static void init() {
 		robotX = Values.initRobotX;
 		robotY = Values.initRobotY;
@@ -455,6 +444,8 @@ class Map {
 }
 
 
+
+//================= Algorithm Layer =================
 class Node {
 	
 	LinkedList<Integer> path = new LinkedList<Integer>();
@@ -468,7 +459,6 @@ class Node {
 		return ((Values.targetX - x) + (Values.targetY - y) + cost); 	
 	
 	}
-	
 	
 	public void setCost(int v) 					{ cost = v; 	}
 	public void setPath(LinkedList<Integer> p) 	{ path = p; 	}
@@ -499,7 +489,7 @@ class AStar {
 	static Node[][] openNodes;
 	static Node[][] closedNodes;	
 	
-
+	//-------------- Initialisation --------------
 	public static void init() {
 		int i = Values.targetX * 2 + 1;
 		int j = Values.targetY * 2 + 1;
@@ -520,6 +510,7 @@ class AStar {
 		openNodes[0][0] = new Node(0);
 	}
 	
+	//-------------- Work --------------
 	public static int currentF() {
 		return Navigator.NODE_DISTANCE + openNodes[Map.robotX][Map.robotY].getCost();
 	}
@@ -608,15 +599,14 @@ class Navigator {
 	
 	static LinkedList<Integer> pathMemory = new LinkedList<Integer>();
 	
-	//================= Initialisation =================
+	//-------------- Initialisation --------------
 	public static void init() {
 		
 		
 	}
 	
 	
-	//================= Work =================
-
+	//-------------- Work --------------
 	public static void advance() {
 		//Robot.forward();
 		Map.updateRobotPosition();
@@ -853,8 +843,6 @@ class Navigator {
 
 
 
-
-
 //================= Action Layer =================
 class Junction implements Behavior
 {
@@ -882,6 +870,8 @@ class Junction implements Behavior
 			Map.robotY = 0;
 			
 			Robot.wait = true;
+			
+			Map.facing = Values.EAST;
 			
 			return;
 		}
