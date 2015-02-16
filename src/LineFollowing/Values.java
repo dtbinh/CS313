@@ -13,7 +13,14 @@ public class Values {
 	public static final int START_Y = 390;
 	
 	
-	
+	public static final boolean LOG_MAP = false;
+	public static final boolean LOG_NODES = false;
+	public static final boolean LOG_SCAN = false;
+	public static final boolean LOG_NEXT = false;
+	public static final boolean LOG_MEM = false;
+	public static final boolean LOG_ALG = false;
+	public static final boolean LOG_SENS = false;
+	public static final boolean LOG_BEH = false;
 	
 	public static final int BLOCKED = 10;
 	public static final int CLEAR = 20;

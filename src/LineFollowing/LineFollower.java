@@ -59,12 +59,9 @@ class Robot {
 	    // add the behavior vector to a new arbitrator and start arbitration
 		Arbitrator arbitrator = new Arbitrator(behaviors);
 		
-		LCD.drawString("Robot", 0, 0);
 		//pilot.setTravelSpeed(100);  // cm per second
 		//Button.waitForAnyPress();
 		LCD.clear();
-		
-		drawSensor();
 		
 		forward();
 		
@@ -151,35 +148,21 @@ class Robot {
 	}
 	
 	public static int senseSonar() { 
-		//System.out.println(ultraSonic.getDistance());
 		return ultraSonic.getDistance(); 
-		
 	} 
 
 	
-	public static void drawSonic() {
-		int distance = ultraSonic.getDistance();
-		
-		LCD.clear();
-		LCD.drawString("ultraSonic: ", 0, 0);
-		LCD.drawInt(distance, 0, 1);
-		LCD.clear();
-		
+	public static void print(String s) {
+		System.out.print(s);
 	}
 	
-	public static void drawSensor() {
-
-		/*
-		int left = L_Sens_Left.getValue();
-		int right = L_Sens_Right.getValue();
-		
-		LCD.drawString("Left Sensor: ", 0, 1);
-		LCD.drawInt(left, 0, 2);
-	
-		LCD.drawString("Right Sensor: ", 0, 3);
-		LCD.drawInt(right, 0, 4);
-		*/
+	public static void println(String s) {
+		if(s == null)
+			System.out.println();
+		else
+			System.out.println(s);
 	}
+	
 }
 
 
@@ -301,68 +284,70 @@ class Map {
 	
 	public static void printMap() {
 		
-		for(int i= worldX - 1; i >=0; i-- ) {
-			for(int j= 0; j < worldY; j++ ) {
-				if(j == robotX && i == robotY)  {
-					System.out.print(" [R] ");
-				} else if(j == targetX && i == targetY) {
-					System.out.print(" [X] ");
-				} else if(virtualWorld[j][i] == Values.CLEAR){
-					System.out.print(" [ ] ");
-				} else if(virtualWorld[j][i] == Values.BLOCKED) {
-					System.out.print(" ... ");
-				} else if(virtualWorld[j][i] == Values.VISITED) {
-					System.out.print(" [#] ");
+		if(Values.LOG_MAP) {
+			for(int i= worldX - 1; i >=0; i-- ) {
+				for(int j= 0; j < worldY; j++ ) {
+					if(j == robotX && i == robotY)  {
+						Robot.print(" [R] ");
+					} else if(j == targetX && i == targetY) {
+						Robot.print(" [X] ");
+					} else if(virtualWorld[j][i] == Values.CLEAR){
+						Robot.print(" [ ] ");
+					} else if(virtualWorld[j][i] == Values.BLOCKED) {
+						Robot.print(" ... ");
+					} else if(virtualWorld[j][i] == Values.VISITED) {
+						Robot.print(" [#] ");
+					}
 				}
+				
+				Robot.println(null);
 			}
-			
-			System.out.println();
 		}
 		
-		
-		for(int i= 0; i < worldX; i++ ) {
-			for(int j= 0; j < worldY; j++ ) {
-				Node n = null;
-				if(AStar.openNodes[i][j] != null) {
-					System.out.print("Open - ");
-					n = AStar.openNodes[i][j];
-				} else if(AStar.closedNodes[i][j] != null) {
-					System.out.print("Closed - ");
-					n = AStar.closedNodes[i][j];
-				} else {
-					continue;
-				}
-				
-				LinkedList<Integer> path = n.getPath();
-				
-				Iterator<Integer> it = path.iterator();
-				
-				System.out.print("X:" + i + " " + "Y:" + j + " | ");
-				 while(it.hasNext()) {
-			        switch(it.next()) {
-			    	case Values.NORTH:
-						System.out.print(" /\\ ");
-						break;
+		if(Values.LOG_NODES) {
+			for(int i= 0; i < worldX; i++ ) {
+				for(int j= 0; j < worldY; j++ ) {
+					Node n = null;
+					if(AStar.openNodes[i][j] != null) {
+						Robot.print("Open - ");
+						n = AStar.openNodes[i][j];
+					} else if(AStar.closedNodes[i][j] != null) {
+						Robot.print("Closed - ");
+						n = AStar.closedNodes[i][j];
+					} else {
+						continue;
+					}
+					
+					LinkedList<Integer> path = n.getPath();
+					
+					Iterator<Integer> it = path.iterator();
+					
+					Robot.print("X:" + i + " " + "Y:" + j + " | ");
+					 while(it.hasNext()) {
+				        switch(it.next()) {
+				    	case Values.NORTH:
+				    		Robot.print(" /\\ ");
+							break;
+							
+						case Values.SOUTH:
+							Robot.print(" \\/ ");
+							break;
 						
-					case Values.SOUTH:
-						System.out.print(" \\/ ");
-						break;
-					
-					case Values.EAST:
-						System.out.print(" > ");
-						break;
-					
-					case Values.WEST:
-						System.out.print(" < ");
-						break;
-					
-			        }
-				 }
-				 System.out.println(" | " + n.getCost());
-				 
+						case Values.EAST:
+							Robot.print(" > ");
+							break;
+						
+						case Values.WEST:
+							Robot.print(" < ");
+							break;
+						
+				        }
+					 }
+					 Robot.println(" | " + n.getCost());
+				}
 			}
 		}
-		System.out.println();
+		Robot.println(null);
 	}
 
 	public static boolean atTarget() {
@@ -570,15 +555,15 @@ class AStar {
 		double dist = 0;
 		
 		for(int i = 0; i<=k; i++) {
-			System.out.println("Potential Solution: " + solution[k].x + " " +solution[k].y);
-			System.out.println("Robot: " + Map.robotX + " " +Map.robotY);
+			if(Values.LOG_NEXT) Robot.print("Pot Solution: " + solution[k].x + " " +solution[k].y + " | ");
+			if(Values.LOG_NEXT) Robot.print("Robot: " + Map.robotX + " " +Map.robotY + " | ");
 			
 			int x = solution[k].x - Map.robotX;
 			int y = solution[k].y - Map.robotY;
 			
 			dist = Math.sqrt( x * x + y * y );
 			
-			System.out.println("Dist: " + dist);
+			if(Values.LOG_NEXT) Robot.println("Dist: " + dist);
 			
 			if(dist < minDist) {
 				minDist = dist;
@@ -587,7 +572,7 @@ class AStar {
 		}
 		
 		
-		System.out.println("Next node is X = " + n.x + ", Y = " + n.y );
+		if(Values.LOG_NEXT) Robot.println("Next node is X = " + n.x + ", Y = " + n.y );
 		return n;
 	}
 
@@ -653,12 +638,14 @@ class Navigator {
 			if(			//Offcourse Right
 				Robot.senseLeftLight() < Values.thLight) 
 			{
-				Robot.drawSensor();
+				if(Values.LOG_SENS) Robot.println("Left Light: " + Robot.senseLeftLight());
+				if(Values.LOG_SENS) Robot.println("Right Ligh: t" + Robot.senseRightLight());
 				adjustRight();
 			} else if(	//Offcourse Left
 					Robot.senseRightLight() < Values.thLight) 
 			{
-				Robot.drawSensor();
+				if(Values.LOG_SENS) Robot.println("Left Light: " + Robot.senseLeftLight());
+				if(Values.LOG_SENS) Robot.println("Right Light: " + Robot.senseRightLight());
 				adjustLeft();
 			}
 			
@@ -743,12 +730,14 @@ class Navigator {
 				if(Robot.senseSonar() < Values.thSonar && Robot.senseSonar() != -1) {
 					Map.updateMap(Values.BLOCKED);
 					
-					System.out.println(Robot.senseSonar() + " Path Blocked");
+					if(Values.LOG_NEXT) Robot.println("Sonar: " + Robot.senseSonar());
+					if(Values.LOG_NEXT) Robot.println(Robot.senseSonar() + " Path Blocked");
 				} else {
 					Map.updateMap(Values.CLEAR);
 					clearPaths[index++] = i;
 					
-					System.out.println(Robot.senseSonar() + " Path Clear");
+					if(Values.LOG_NEXT) Robot.println("Sonar: " + Robot.senseSonar());
+					if(Values.LOG_NEXT) Robot.println(Robot.senseSonar() + " Path Clear");
 				}
 			}
 			
@@ -759,9 +748,9 @@ class Navigator {
 
 	public static void followPathMem() {
 
-		System.out.println("Executing Memory Step");
+		if(Values.LOG_MEM) Robot.println("Executing Memory Step");
 		
-		if(pathMemory.size() == 1) System.out.println("arrived at destination");
+		if(pathMemory.size() == 1) if(Values.LOG_ALG) Robot.println("arrived at destination");
 		
 		Navigator.robotFace(pathMemory.pop());
 		
@@ -792,9 +781,9 @@ class Navigator {
 				}
 			}
 			
-			System.out.println("SKIP IS :::: " + skip);
+			if(Values.LOG_MEM) Robot.println("SKIP IS :::: " + skip);
 			
-			System.out.println("Memorising return path");
+			if(Values.LOG_MEM) Robot.println("Memorising return path");
 			iB = returnPath.descendingIterator();
 			int count = 0;
 			
@@ -822,7 +811,7 @@ class Navigator {
 			}
 		}
 		
-		System.out.println("Memorising path to node");	
+		if(Values.LOG_MEM) Robot.println("Memorising path to node");	
 		iN = nodePath.iterator();
 		
 		while(iN.hasNext()) {		
@@ -833,7 +822,7 @@ class Navigator {
 				skip--;
 			}
 		}
-		System.out.println("Memorization complete");
+		if(Values.LOG_MEM) Robot.println("Memorization complete");
 	}
 	
 	public static boolean isMemEmpty() {
@@ -851,6 +840,7 @@ class Junction implements Behavior
 	public void action()			// what to do
 	{	
 		
+		
 		stop = false;
 		
 		if(Robot.wait) {
@@ -858,7 +848,7 @@ class Junction implements Behavior
 		}
 		
 		if(Map.atTarget() == true ) {
-			System.out.println("At target");
+			Robot.println("At target");
 			
 			Robot.stop();
 			//Robot.robot.getRobot().setX(Values.START_X);
@@ -876,7 +866,10 @@ class Junction implements Behavior
 			return;
 		}
 		
-		System.out.println("==== Junction behaviour ====");
+		if(Values.LOG_SENS) Robot.println("Left Light: " + Robot.senseLeftLight());
+		if(Values.LOG_SENS) Robot.println("Right Light: " + Robot.senseRightLight());
+		
+		if(Values.LOG_BEH) Robot.println("==== Junction behaviour ====");
 
 		Robot.stop();	
 		//Robot.travel(9);
@@ -884,7 +877,7 @@ class Junction implements Behavior
 		Robot.stop();	
 		
 		Map.printMap();
-		Robot.drawSensor();
+		
 		
 		
 		
@@ -892,14 +885,14 @@ class Junction implements Behavior
 			
 		if(Navigator.isMemEmpty()) {
 			//scan neighbour nodes
-			System.out.println("Scanning");
+			if(Values.LOG_ALG) Robot.println("Scanning");
 			int clearPaths[] = Navigator.scanNeightbours();
-			System.out.println();
+			Robot.println(null);
 			
 			//update their cost value
-			System.out.println("Updating");
+			if(Values.LOG_ALG) Robot.println("Updating Cost");
 			Navigator.updateNeightbourNodes(clearPaths);
-			System.out.println();
+			Robot.println(null);
 			
 			//close current node
 			AStar.addClosedNode(Map.robotX, Map.robotY);
@@ -907,14 +900,14 @@ class Junction implements Behavior
 			
 			
 			//getNodeWithSmallestCost
-			System.out.println("Get next node");
+			if(Values.LOG_ALG) Robot.println("Get next node");
 			Node n = AStar.getNextNode();
-			System.out.println();
+			Robot.println(null);
 		
 			//memorize path
-			System.out.println("Memorize path");
+			if(Values.LOG_ALG) Robot.println("Memorize path");
 			Navigator.findPath(n);
-			System.out.println();
+			Robot.println(null);
 			
 		} 		
 		Navigator.followPathMem();
@@ -922,7 +915,7 @@ class Junction implements Behavior
 		
 		try{Thread.sleep(1000);}catch(Exception e){}
 		
-		System.out.println("==== Done ====");
+		if(Values.LOG_BEH) Robot.println("---- Done ----");
 		//================================
 			
 			
@@ -956,11 +949,10 @@ class Move implements Behavior
 		
 		Robot.forward();
 		
-		System.out.println("===== Move Behaviour =====");
-		Robot.drawSensor();
+		if(Values.LOG_BEH) Robot.println("===== Move Behaviour =====");
 		
 		Navigator.moveForward();
-		System.out.println("===== Done =====");
+		if(Values.LOG_BEH) Robot.println("---- Done ----");
 		
 		Robot.stop();
 		
