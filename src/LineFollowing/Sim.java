@@ -57,7 +57,7 @@ public class Sim {
 			      new Point(-10, -10), new Point(10, -10)
 			    };
 			   
-		  /*
+		  
 		  RobotContext.useTarget("sprites/hazelnut.gif", nut_mesh, 200, 350);
 		  
 		  RobotContext.useTarget("sprites/hazelnut.gif", nut_mesh, 300, 350);
@@ -77,7 +77,7 @@ public class Sim {
 		  RobotContext.useTarget("sprites/hazelnut.gif", nut_mesh, 300, 250);
 		  
 		  RobotContext.useTarget("sprites/hazelnut.gif", nut_mesh, 400, 150);
-		*/
+		
 		
 	}
 	
