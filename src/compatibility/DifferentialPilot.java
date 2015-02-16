@@ -1,6 +1,7 @@
 package compatibility;
 
 import LineFollowing.Robot;
+import LineFollowing.Sim;
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.robotsim.Gear;
 
@@ -22,7 +23,7 @@ public class DifferentialPilot {
     public void rotateLeft() { 		gear.left();	}
     public void rotateRight() {		gear.right();	}
     public void rotate(int angle) { 
-    	Actor r = Robot.robot.getRobot();
+    	Actor r = Sim.robot.getRobot();
 		r.turn(angle);
     }
 }

@@ -8,7 +8,6 @@ import compatibility.LCD;
 import lejos.geom.Point;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
-import ch.aplu.jgamegrid.Actor;
 import ch.aplu.robotsim.LegoRobot;
 import ch.aplu.robotsim.LightSensor;
 import ch.aplu.robotsim.UltrasonicSensor;
@@ -26,17 +25,13 @@ public class Robot {
 	static private LightSensor L_Sens_Right;
 	
 	static private UltrasonicSensor ultraSonic;
-	
-	static public LegoRobot robot;
   
 	static DifferentialPilot pilot;
 	//================= Constructor =================
 	Robot( 
-			LegoRobot r,
 	  		LightSensor lS, LightSensor rS,
 	  		UltrasonicSensor us, DifferentialPilot p) {
 	  	
-		robot = r;
 		
 		AStar.init();
 		Map.init();
@@ -105,37 +100,7 @@ public class Robot {
 		
 		pilot.forward();
 	}
-	
-	public static void travel(int dist) {
 
-		Actor r = robot.getRobot();
-		
-		
-		switch(Map.facing) {
-		
-		case Values.NORTH:
-			//r.setY(r.getY() - dist);
-
-			break;
-			
-		case Values.SOUTH:
-		
-			//r.setY(r.getY() + dist);
-			break;
-		
-		case Values.EAST:
-		
-			//r.setX(r.getX() + dist);
-			break;
-		
-		case Values.WEST:
-		
-			//r.setX(r.getX() - dist);
-			break;
-		
-		}
-		r.move(dist);
-	}
 	
 	public static int senseLeftLight() { 	
 		return L_Sens_Left.getValue(); 

@@ -22,7 +22,7 @@ import ch.aplu.util.Monitor;
 
 //================= Simulation Layer =================
 public class Sim {
-	LegoRobot robot;
+	public static LegoRobot robot;
 	
 	static LightSensor L_Sens_Left;
 	static LightSensor L_Sens_Right;
@@ -118,7 +118,7 @@ public class Sim {
 	public Sim() throws Exception
 	{
 		LegoRobot r = Setup();
-		new Robot(r, L_Sens_Left, L_Sens_Right, us, pilot);
+		new Robot(L_Sens_Left, L_Sens_Right, us, pilot);
 	
 	}
   
