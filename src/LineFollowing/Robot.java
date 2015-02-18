@@ -116,16 +116,41 @@ public class Robot {
 
 	
 	public static void print(String s) {
-		LCD.drawString(s, draw_x, draw_y);
+		/*LCD.drawString(s, draw_x, draw_y);
 		draw_x += s.length();
+		*/
+		System.out.print(s);
 	}
 	
 	public static void println(String s) {
+		/*
 		if(s != null) LCD.drawString(s, draw_x, draw_y);
 		draw_y++;
 		draw_x = 0;
+		*/
+		if(s != null) System.out.println(s);
+		else System.out.println();
 	}
+
 	
+	public static LinkedList<Integer> clone(LinkedList<Integer> oldL) {
+		
+		
+		LinkedList<Integer> newL = new LinkedList<Integer>();
+		
+	
+		
+		for(int i = 0; i < oldL.size() ; i++) {
+			
+			int nr = (Integer) oldL.get(i);
+			newL.add(nr);
+			
+		}		
+		return newL;
+		
+		
+		//return (LinkedList<Integer>) oldL.clone();
+	}
 }
 
 
@@ -416,7 +441,7 @@ class Node {
 	
 	public void updatePath(int w) {
 		//path.add(w);
-		path.addLast(w);
+		path.add(w);
 	}
 	
 	Node(int c) {
@@ -446,7 +471,7 @@ class AStar {
 		openNodes = new Node[i][j];
 		closedNodes = new Node[i][j];
 		
-		for(int it = 0; it < i; it-- ) {
+		for(int it = 0; it < i; it++ ) {
 			for(int jt = 0; j < j; jt++ ) {
 				openNodes[it][jt] = null;
 				closedNodes[it][jt] = null;
@@ -632,7 +657,7 @@ class Navigator {
 		Robot.stop();
 		Robot.rotateLeft();
 		
-		while(Robot.senseRightLight() < Values.thLight && !Move.stop);
+		while(Robot.senseLeftLight() < Values.thLight && !Move.stop);
 		
 		Robot.stop();
 		Robot.forward();
@@ -664,7 +689,7 @@ class Navigator {
 			Node n = AStar.getOpenNode(x, y);
 			if(n == null) {
 				LinkedList<Integer> L = AStar.openNodes[Map.robotX][Map.robotY].getPath();
-				LinkedList<Integer> newL = (LinkedList<Integer>) L.clone();
+				LinkedList<Integer> newL = Robot.clone(L);
 				
 				newL.add(clearPaths[i]);
 				
@@ -715,7 +740,8 @@ class Navigator {
 		
 		if(pathMemory.size() == 1) if(Values.LOG_ALG) Robot.println("arrived at destination");
 		
-		Navigator.robotFace(pathMemory.pop());
+		Navigator.robotFace(pathMemory.get(0));
+		pathMemory.remove(0);
 		
 	}
 	
@@ -736,8 +762,11 @@ class Navigator {
 		if(!(Map.robotX == 0 && Map.robotY == 0)) {
 			
 			while(iB.hasNext() && iN.hasNext()) {
+				int v1 = (Integer) iB.next().intValue();
+				int v2 = (Integer) iN.next().intValue(); 
+				System.out.println("Compare " + v1 + " - " + v2);
 				
-				if(iB.next() == iN.next()) {
+				if(v1 == v2 ) {
 					skip++;
 				} else {
 					break;
@@ -747,13 +776,17 @@ class Navigator {
 			if(Values.LOG_MEM) Robot.println("SKIP IS :::: " + skip);
 			
 			if(Values.LOG_MEM) Robot.println("Memorising return path");
-			iB = returnPath.descendingIterator();
+			//iB = returnPath.descendingIterator();
 			int count = 0;
+			int index = returnPath.size() - 1;
 			
-			while(iB.hasNext() && returnPath.size() - skip > count) {
+			while(index >= 0 && returnPath.size() - skip > count) {
 				count++;
 				
-			    int dir = (int) iB.next();
+				
+			    int dir = (int) returnPath.get(index);
+			    
+			    index--;
 			     
 			    switch(dir) {
 			    case Values.NORTH:
@@ -815,7 +848,7 @@ class Junction implements Behavior
 			//Robot.robot.getRobot().setX(Values.START_X);
 			//Robot.robot.getRobot().setY(Values.START_Y);
 			
-			Navigator.pathMemory = (LinkedList<Integer>) AStar.openNodes[Map.robotX][Map.robotY].getPath().clone();
+			Navigator.pathMemory = Robot.clone(AStar.openNodes[Map.robotX][Map.robotY].getPath());
 			
 			Map.robotX = 0;
 			Map.robotY = 0;
