@@ -764,7 +764,7 @@ class Navigator {
 			while(iB.hasNext() && iN.hasNext()) {
 				int v1 = (Integer) iB.next().intValue();
 				int v2 = (Integer) iN.next().intValue(); 
-				System.out.println("Compare " + v1 + " - " + v2);
+				if(Values.LOG_MEM) Robot.println("Compare " + v1 + " - " + v2);
 				
 				if(v1 == v2 ) {
 					skip++;
